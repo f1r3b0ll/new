@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Плитки — Админка{% endblock %}
+{% block content %}
+
+{% with msgs = get_flashed_messages(with_categories=true) %}
+  {% for cat, msg in msgs %}
+    <div style="padding:14px 20px;border-radius:12px;margin-bottom:18px;
+        background:{{ 'rgba(71,229,188,.15)' if cat=='ok' else 'rgba(255,95,109,.15)' }};
+        border:1px solid {{ 'rgba(71,229,188,.5)' if cat=='ok' else 'rgba(255,95,109,.5)' }};
+        color:{{ '#47e5bc' if cat=='ok' else '#ff5f6d' }};">{{ msg }}</div>
+  {% endfor %}
+{% endwith %}
+
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
+    <h1 class="page-title">Плитки <span>с фото</span> 🖼️</h1>
+    <div style="display:flex;gap:10px;">
+        <a href="/admin" class="btn-cta" style="background:rgba(255,255,255,.08);color:#f2f2f7;">Заявки</a>
+        <a href="/admin/logout" class="btn-cta" style="background:rgba(255,255,255,.08);color:#f2f2f7;">Выйти</a>
+    </div>
+</div>
+<p class="page-sub">Загружай свои фото — они сразу появятся на сайте.</p>
+
+<!-- ФОРМА ДОБАВЛЕНИЯ -->
+<form method="POST" enctype="multipart/form-data"
+      style="max-width:640px;display:flex;flex-direction:column;gap:14px;margin-bottom:50px;
+             background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+             border-radius:18px;padding:24px;">
+
+    <label style="font-weight:600;">Раздел</label>
+    <select name="section"
+        style="padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+               background:#1a1a24;color:#fff;font-size:1rem;">
+        <option value="home">Главная</option>
+        <option value="services">Услуги</option>
+        <option value="projects">Проекты</option>
+    </select>
+
+    <input type="text" name="title" placeholder="Заголовок" required
+        style="padding:14px 18px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+               background:rgba(255,255,255,.04);color:#fff;font-size:1rem;outline:none;">
+
+    <textarea name="description" rows="3" placeholder="Описание" required
+        style="padding:14px 18px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+               background:rgba(255,255,255,.04);color:#fff;font-size:1rem;outline:none;resize:vertical;"></textarea>
+
+    <input type="text" name="price" placeholder="Цена (необязательно, например: от 5 000 ₽)"
+        style="padding:14px 18px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+               background:rgba(255,255,255,.04);color:#fff;font-size:1rem;outline:none;">
+
+    <label style="font-weight:600;">Фото (png / jpg / webp / gif, до 8 МБ)</label>
+    <input type="file" name="image" accept="image/*" required
+        style="padding:12px;border-radius:12px;border:1px dashed rgba(255,255,255,.2);
+               background:rgba(255,255,255,.02);color:#c9c9d4;">
+
+    <button type="submit" class="btn-cta" style="align-self:flex-start;">Добавить плитку ✨</button>
+</form>
+
+<!-- СПИСКИ ПЛИТОК ПО РАЗДЕЛАМ -->
+{% for section, items, label in [('home', home, 'Главная'), ('services', services, 'Услуги'), ('projects', projects, 'Проекты')] %}
+<h2 style="font-family:'Unbounded';font-size:1.2rem;margin:28px 0 14px;">{{ label }} ({{ items|length }})</h2>
+{% if items %}
+<div class="tiles">
+    {% for t in items %}
+    <div class="tile">
+        <img class="tile-img" src="/uploads/{{ t['image'] }}" alt="{{ t['title'] }}">
+        <div class="tile-body">
+            <div class="tile-title">{{ t['title'] }}</div>
+            <div class="tile-desc">{{ t['description'] }}</div>
+            {% if t['price'] %}<div class="tile-price">{{ t['price'] }}</div>{% endif %}
+            <form method="POST" action="/admin/tiles/delete/{{ t['id'] }}" style="margin-top:8px;">
+                <button type="submit"
+                    style="padding:8px 14px;border-radius:999px;border:1px solid rgba(255,95,109,.5);
+                           background:rgba(255,95,109,.12);color:#ff5f6d;font-weight:600;cursor:pointer;">
+                    Удалить 🗑️
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p style="color:#6d6d7e;">Пока пусто.</p>
+{% endif %}
+{% endfor %}
+
+{% endblock %}

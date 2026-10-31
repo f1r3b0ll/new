@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Заявки — Админка{% endblock %}
+{% block content %}
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
+        <h1 class="page-title">Заявки <span>({{ leads|length }})</span> 📬</h1>
+        <a href="/admin/logout" class="btn-cta" style="background:rgba(255,255,255,.08);color:#f2f2f7;">Выйти</a>
+    </div>
+    <p class="page-sub">Все сообщения из формы «Контакты».</p>
+
+    {% if not leads %}
+    <p style="color:#a3a3b3;">Пока заявок нет 😴</p>
+    {% else %}
+    <div style="display:flex;flex-direction:column;gap:14px;">
+        {% for l in leads %}
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+                    border-radius:14px;padding:18px 22px;">
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+                <strong>{{ l['name'] }}</strong>
+                <span style="color:#6d6d7e;font-size:.88rem;">{{ l['created_at'] }}</span>
+            </div>
+            <div style="color:#47e5bc;font-size:.92rem;margin-bottom:8px;">📧 {{ l['email'] }}</div>
+            <div style="color:#d4d4de;line-height:1.6;white-space:pre-wrap;">{{ l['message'] }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endblock %}

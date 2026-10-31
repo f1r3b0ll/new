@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Контакты — Pupsik.io{% endblock %}
+{% block content %}
+    <h1 class="page-title">Связаться <span>со мной</span> 💬</h1>
+    <p class="page-sub">Напиши — отвечу в течение дня.</p>
+
+    <div class="tiles" style="margin-bottom:40px;">
+        {% for t in tiles %}
+        <div class="tile">
+            <img class="tile-img" src="{{ t.img }}" alt="{{ t.title }}" loading="lazy">
+            <div class="tile-body">
+                <div class="tile-title">{{ t.title }}</div>
+                <div class="tile-desc">{{ t.desc }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if sent %}
+    <div style="background:rgba(71,229,188,.15);border:1px solid rgba(71,229,188,.5);
+                padding:18px 22px;border-radius:14px;margin-bottom:24px;color:#47e5bc;">
+        ✅ Спасибо! Сообщение отправлено — скоро свяжусь.
+    </div>
+    {% endif %}
+
+    <form method="POST" style="max-width:560px;display:flex;flex-direction:column;gap:14px;">
+        <input type="text" name="name" placeholder="Твоё имя" required
+            style="padding:14px 18px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+                   background:rgba(255,255,255,.04);color:#fff;font-size:1rem;outline:none;">
+        <input type="email" name="email" placeholder="Email" required
+            style="padding:14px 18px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+                   background:rgba(255,255,255,.04);color:#fff;font-size:1rem;outline:none;">
+        <textarea name="message" rows="5" placeholder="Сообщение" required
+            style="padding:14px 18px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+                   background:rgba(255,255,255,.04);color:#fff;font-size:1rem;outline:none;resize:vertical;"></textarea>
+        <button type="submit" class="btn-cta" style="align-self:flex-start;">Отправить ✉️</button>
+    </form>
+{% endblock %}

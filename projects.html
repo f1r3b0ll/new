@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Проекты — Pupsik.io{% endblock %}
+{% block content %}
+    <h1 class="page-title">Мои <span>проекты</span> 🚀</h1>
+    <p class="page-sub">Реальные работы, которые уже живут в интернете.</p>
+
+    {% if tiles %}
+    <div class="tiles">
+        {% for t in tiles %}
+        <div class="tile">
+            <img class="tile-img" src="/uploads/{{ t['image'] }}" alt="{{ t['title'] }}" loading="lazy">
+            <div class="tile-body">
+                <div class="tile-title">{{ t['title'] }}</div>
+                <div class="tile-desc">{{ t['description'] }}</div>
+                {% if t['price'] %}<div class="tile-price">{{ t['price'] }}</div>{% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="color:#6d6d7e;">Плиток пока нет — добавь их в <a href="/admin/tiles" style="color:#47e5bc;">админке</a> 🎨</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Вход в админку{% endblock %}
+{% block content %}
+    <h1 class="page-title">Вход в <span>админку</span> 🔐</h1>
+    <p class="page-sub">Введи пароль, чтобы увидеть заявки.</p>
+
+    {% if error %}
+    <div style="background:rgba(255,95,109,.15);border:1px solid rgba(255,95,109,.5);
+                padding:14px 20px;border-radius:12px;margin-bottom:18px;color:#ff5f6d;">
+        ❌ {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST" style="max-width:400px;display:flex;flex-direction:column;gap:14px;">
+        <input type="password" name="password" placeholder="Пароль" required autofocus
+            style="padding:14px 18px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+                   background:rgba(255,255,255,.04);color:#fff;font-size:1rem;outline:none;">
+        <button type="submit" class="btn-cta" style="align-self:flex-start;">Войти</button>
+    </form>
+{% endblock %}1

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Мой сайт{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0f14;
+            color: #f2f2f7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        a { color: inherit; }
+
+        /* ======= ШАПКА ======= */
+        header {
+            position: sticky; top: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px 40px;
+            background: rgba(20, 20, 28, 0.65);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        header::after {
+            content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px;
+            background: linear-gradient(90deg, #ff5f6d, #ffc371, #47e5bc, #4facfe, #b06ab3, #ff5f6d);
+            background-size: 300% 100%;
+            animation: rainbow 6s linear infinite;
+        }
+        @keyframes rainbow {
+            0%   { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        .logo {
+            display: flex; align-items: center; gap: 12px;
+            font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 1.25rem;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #ff5f6d, #ffc371, #47e5bc, #4facfe);
+            background-size: 300% 100%;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            animation: rainbow 6s linear infinite;
+            text-decoration: none; transition: transform .25s ease;
+        }
+        .logo:hover { transform: scale(1.05) rotate(-1deg); }
+        .logo-icon {
+            width: 38px; height: 38px; border-radius: 12px;
+            display: grid; place-items: center; font-size: 20px;
+            background: linear-gradient(135deg, #ff5f6d, #b06ab3);
+            box-shadow: 0 0 22px rgba(255, 95, 109, 0.45);
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 22px rgba(255, 95, 109, 0.45); }
+            50%      { box-shadow: 0 0 34px rgba(176, 106, 179, 0.7); }
+        }
+
+        nav { display: flex; gap: 8px; flex-wrap: wrap; }
+        nav a {
+            text-decoration: none; color: #c9c9d4; font-weight: 600; font-size: .92rem;
+            padding: 9px 16px; border-radius: 999px; transition: all .25s ease;
+        }
+        nav a:hover { color: #fff; background: rgba(255,255,255,0.08); transform: translateY(-1px); }
+        nav a.active { color: #0f0f14; background: linear-gradient(135deg, #ffc371, #47e5bc); }
+
+        .btn-cta {
+            font-weight: 600; padding: 11px 22px; border-radius: 999px; border: none;
+            cursor: pointer; color: #0f0f14;
+            background: linear-gradient(135deg, #ffc371, #ff5f6d);
+            box-shadow: 0 6px 20px rgba(255, 95, 109, 0.35);
+            transition: transform .2s ease, box-shadow .2s ease;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(255, 95, 109, 0.55); }
+
+        /* ======= Контент ======= */
+        main { flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; padding: 70px 40px; }
+        .page-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: clamp(1.9rem, 5vw, 3rem);
+            line-height: 1.1; margin-bottom: 14px;
+        }
+        .page-title span {
+            background: linear-gradient(90deg, #ff5f6d, #ffc371, #47e5bc, #4facfe);
+            background-size: 300% 100%;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            animation: rainbow 6s linear infinite;
+        }
+        .page-sub { color: #a3a3b3; font-size: 1.05rem; margin-bottom: 46px; max-width: 640px; }
+
+        /* ======= ПЛИТКИ ======= */
+        .tiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .tile {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex; flex-direction: column;
+            transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+        }
+        .tile:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 195, 113, 0.5);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+        }
+        .tile-img {
+            width: 100%; aspect-ratio: 3/2; object-fit: cover;
+            background: #1a1a24; display: block;
+            transition: transform .5s ease, filter .4s ease;
+        }
+        .tile:hover .tile-img { transform: scale(1.06); filter: brightness(1.08); }
+        .tile-body { padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+        .tile-title { font-family: 'Unbounded', sans-serif; font-size: 1.05rem; font-weight: 600; }
+        .tile-desc { color: #a3a3b3; font-size: .92rem; line-height: 1.55; flex: 1; }
+        .tile-price {
+            font-weight: 700; font-size: .9rem; color: #47e5bc; margin-top: 4px;
+        }
+
+        /* ======= Подвал ======= */
+        footer {
+            text-align: center; padding: 26px 20px; color: #6d6d7e; font-size: .88rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        /* ======= Мобилка ======= */
+        @media (max-width: 760px) {
+            header { padding: 14px 18px; flex-wrap: wrap; gap: 12px; }
+            nav { order: 3; width: 100%; justify-content: center; }
+            .btn-cta { display: none; }
+            main { padding: 50px 18px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <div class="logo-icon">✨</div>
+            Pupsik<span style="font-weight:600;opacity:.7;font-size:.8em;">.io</span>
+        </a>
+
+        <nav>
+            <a href="/" class="{{ 'active' if active == 'home' }}">Главная</a>
+            <a href="/services" class="{{ 'active' if active == 'services' }}">Услуги</a>
+            <a href="/projects" class="{{ 'active' if active == 'projects' }}">Проекты</a>
+            <a href="/contacts" class="{{ 'active' if active == 'contacts' }}">Контакты</a>
+        </nav>
+
+        <a href="/contacts" class="btn-cta">Начать 🚀</a>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        © 2026 Pupsik.io — сделано с ❤️ на Python
+    </footer>
+</body>
+</html>
